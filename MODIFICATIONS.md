@@ -13,11 +13,12 @@
 
 上游源码**零逻辑修改**。改动分两类：
 
-### 1. 修改的既有文件（仅 1 个）
+### 1. 修改的既有文件（仅 2 个）
 
 | 文件 | 改动 |
 |---|---|
 | `README.md` | 顶部新增一段说明，指向 `CUSTOM.md`；其余内容保持上游原样 |
+| `.gitignore` | 追加 2 行，忽略 `tools/*.exe`（本机 arduino-cli 二进制） |
 
 ### 2. 新增文件
 
@@ -34,6 +35,8 @@
 | `setup.bat` | 一键还原依赖、Monaco 静态资源、Python venv |
 | `start-custom.bat` | 一键启动后端 + 前端（带 overlay 环境变量） |
 | `docs/OVERLAY.md` | overlay 机制与扩板说明 |
+| `tools/README.md` | 占位说明：`arduino-cli.exe` 放这里（目录本身需提交才能存在） |
+| `.gitattributes` | 强制 `*.bat` 以 CRLF 检出（`goto` 标签在纯 LF 下不稳） |
 | `CUSTOM.md` | 本 fork 的增量说明 |
 | `MODIFICATIONS.md` | 本文件 |
 

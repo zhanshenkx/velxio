@@ -3,7 +3,8 @@
 这是 [davidmonterocrespo24/velxio](https://github.com/davidmonterocrespo24/velxio) 的
 **个人 fork**，在保留上游全部功能的前提下，加了一块自己画的板卡。
 
-- 上游源码 **零修改**（唯一动过的既有文件是 `README.md`，只加了一段指向本文件的说明）
+- 上游源码 **零逻辑修改**（动过的既有文件只有两个：`README.md` 加了指向本文件的说明，
+  `.gitignore` 加了 2 行忽略 `tools/*.exe`）
 - 全部增量都是**新增文件**，集中在 `frontend/src/pro/`
 - 修改声明：**[MODIFICATIONS.md](MODIFICATIONS.md)**（AGPLv3 §5 要求）
 - 机制与扩板说明：**[docs/OVERLAY.md](docs/OVERLAY.md)**
@@ -23,6 +24,7 @@ frontend/src/pro/
   pages/marketing.ts       空营销页
 setup.bat                  一键还原依赖 / Monaco / Python venv
 start-custom.bat           一键启动后端 8001 + 前端 5173
+tools/README.md            arduino-cli.exe 的放置说明（占位，让目录能进仓库）
 docs/OVERLAY.md            机制说明
 MODIFICATIONS.md           AGPLv3 修改声明
 ```
@@ -47,9 +49,15 @@ SERIAL:  Zhanshenkx Uno R3 online
          blink 2  millis() = 1001
 ```
 
+另外用 `git archive` 导出一份**不含 `node_modules` / `venv` / Monaco 的干净检出**，
+在全新浏览器 profile 下重跑同一条链路（`setup.bat` → `start-custom.bat` → 选择器 →
+Run），结果一致：板卡 `kind` 为 `zhanshenkx-uno`，串口输出同上。
+
 ## 跑起来（Windows）
 
 ```bat
+git clone https://github.com/zhanshenkx/velxio.git
+cd velxio
 setup.bat          :: 首次：装依赖 + 补 Monaco + 建 venv + 检查 arduino-cli
 start-custom.bat   :: 启动，自动开浏览器
 ```
@@ -59,7 +67,22 @@ start-custom.bat   :: 启动，自动开浏览器
 > Vite 7 在部分 Windows 环境只绑 `::1`，**必须用 `localhost`，不能用 `127.0.0.1`**。
 
 前置：Node 18+、Python 3.10+、`arduino-cli`（放 `tools\arduino-cli.exe` 或加进 `PATH`）。
-首次编译时后端会自动安装 `arduino:avr` 内核（约 400MB，等 2–3 分钟）。
+
+- **不需要 `--recursive`**：`third-party/` 下的 4 个子模块（avr8js / rp2040js /
+  wokwi-elements / wokwi-features）只是源码参考，构建走 npm 上的 `avr8js@0.21.0`、
+  `rp2040js@1.3.2`，普通 clone 即可。
+- `tools\` 目录里只提交了 `README.md` 占位；下载的 `arduino-cli.exe` 被 `.gitignore`
+  忽略，放进去不会把工作区弄脏。
+- 首次编译时后端会自动安装 `arduino:avr` 内核（约 400MB，等 2–3 分钟），装在当前用户的
+  Arduino 目录里，换机器才需要重装。
+
+## 疑难：整页白屏 + `Failed to resolve import "@pro/desktop_index"`
+
+Vite 的错误浮层报这个，说明 `@pro` 别名没指到 `frontend/src/pro`。最常见原因是
+`PRO_OVERLAY_PATH` **尾部多了一个空格**（cmd 里写 `set VAR=value && cmd` 会把 `&&`
+前的空格并进变量值）。本仓库的 `start-custom.bat` 已用 `set "VAR=value"` 并在父进程
+导出、由 `start` 子进程继承，正常路径不会踩到；如果你手写启动命令，注意也这么写。
+
 
 ## 已知边界
 

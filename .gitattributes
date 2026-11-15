@@ -1,0 +1,5 @@
+# cmd.exe parses `goto` labels and blocks inconsistently when a .bat file is
+# checked out with bare LF endings. Force CRLF for the Windows launchers so a
+# clone behaves the same regardless of core.autocrlf.
+*.bat text eol=crlf
+*.cmd text eol=crlf
