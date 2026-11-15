@@ -1,7 +1,7 @@
 # Velxio: Arduino & Embedded Board Emulator
 
 > **This is a personal fork with a custom board overlay.**
-> Added: a hand-drawn `Acme Uno R3` board (SVG + pin table) under
+> Added: a hand-drawn `Zhanshenkx Uno R3` board (SVG + pin table) under
 > `frontend/src/pro/`, plus `setup.bat` / `start-custom.bat` for one-click local
 > launch. Upstream source is otherwise unmodified.
 > See **[CUSTOM.md](CUSTOM.md)** for what changed and how to run,

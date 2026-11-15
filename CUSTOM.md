@@ -15,8 +15,8 @@ frontend/src/pro/
   index.ts                 mountPro()：注册板卡 + 挂板载 LED 订阅
   desktop_index.ts         Vite 静态解析的分支，必须存在
   boards/
-    AcmeUnoElement.ts      板卡 Web Component：SVG 外观 + pinInfo（26 个焊盘）
-    acmeUno.ts             ProBoardDef：标签 / FQBN / 引脚表 / 种子代码
+    ZhanshenkxUnoElement.ts      板卡 Web Component：SVG 外观 + pinInfo（26 个焊盘）
+    zhanshenkxUno.ts             ProBoardDef：标签 / FQBN / 引脚表 / 种子代码
   data/proExamples.ts      空示例列表（OSS 构建无条件引用）
   seoRoutes.ts             空 SEO 路由
   i18n/register.ts         空 i18n 注册
@@ -27,7 +27,7 @@ docs/OVERLAY.md            机制说明
 MODIFICATIONS.md           AGPLv3 修改声明
 ```
 
-## 新板：Acme Uno R3
+## 新板：Zhanshenkx Uno R3
 
 不是换个标签的 Uno —— 外观是手写 Web Component + SVG，引脚表独立，
 FQBN 走 `arduino:avr:uno` 并自动路由到 `avr8js`（浏览器内逐条执行真固件）。
@@ -35,13 +35,13 @@ FQBN 走 `arduino:avr:uno` 并自动路由到 `avr8js`（浏览器内逐条执�
 实测（无头浏览器驱动真实 App，非截图伪造）：
 
 ```
-选择器搜 "acme" → Acme Uno R3 → 放板 → Run
+选择器搜 "zhanshenkx" → Zhanshenkx Uno R3 → 放板 → Run
 
-Starting compilation for Acme Uno R3 (arduino:avr:uno)
+Starting compilation for Zhanshenkx Uno R3 (arduino:avr:uno)
 Sketch uses 2402 bytes (7%) of program storage space
 ✓ Compilation successful
 
-SERIAL:  Acme Uno R3 online
+SERIAL:  Zhanshenkx Uno R3 online
          F_CPU = 16000000 Hz
          blink 1  millis() = 500
          blink 2  millis() = 1001
@@ -54,7 +54,7 @@ setup.bat          :: 首次：装依赖 + 补 Monaco + 建 venv + 检查 arduin
 start-custom.bat   :: 启动，自动开浏览器
 ```
 
-打开 <http://localhost:5173/editor>，选择器里搜 `acme`。
+打开 <http://localhost:5173/editor>，选择器里搜 `zhanshenkx`。
 
 > Vite 7 在部分 Windows 环境只绑 `::1`，**必须用 `localhost`，不能用 `127.0.0.1`**。
 
@@ -66,7 +66,7 @@ start-custom.bat   :: 启动，自动开浏览器
 - **板载 LED 没有官方通道**：画布只给它认识的板传 `onboardLeds`，`ProBoardDef.render`
   拿不到。这里用 `getBusBinding().pins.onPinChange` 自行订阅 D13，属绕过而非官方 API。
 - ESP32 / 树莓派需要后端 QEMU 二进制与 ESP-IDF，本 fork 未包含。
-- 改名只需两处：`boards/acmeUno.ts` 的 `label`/`kind`，与 `AcmeUnoElement.ts` 的丝印文字。
+- 改名只需两处：`boards/zhanshenkxUno.ts` 的 `label`/`kind`，与 `ZhanshenkxUnoElement.ts` 的丝印文字。
 
 ## 许可证
 

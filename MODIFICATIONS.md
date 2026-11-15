@@ -25,8 +25,8 @@
 |---|---|
 | `frontend/src/pro/index.ts` | `mountPro()` 入口：注册自定义板卡、挂载板载 LED 订阅 |
 | `frontend/src/pro/desktop_index.ts` | 桌面构建分支，Vite 静态解析要求存在 |
-| `frontend/src/pro/boards/AcmeUnoElement.ts` | 板卡 Web Component（SVG 外观 + `pinInfo` 26 个焊盘） |
-| `frontend/src/pro/boards/acmeUno.ts` | 板卡定义 `ProBoardDef`（标签 / FQBN / 引脚映射 / 种子代码） |
+| `frontend/src/pro/boards/ZhanshenkxUnoElement.ts` | 板卡 Web Component（SVG 外观 + `pinInfo` 26 个焊盘） |
+| `frontend/src/pro/boards/zhanshenkxUno.ts` | 板卡定义 `ProBoardDef`（标签 / FQBN / 引脚映射 / 种子代码） |
 | `frontend/src/pro/data/proExamples.ts` | 示例列表的空实现（OSS 构建无条件引用） |
 | `frontend/src/pro/seoRoutes.ts` | SEO 路由的空实现 |
 | `frontend/src/pro/i18n/register.ts` | i18n 注册的空实现 |

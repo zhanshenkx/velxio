@@ -1,5 +1,5 @@
 /**
- * AcmeUnoElement — a Velxio board Web Component written from scratch.
+ * ZhanshenkxUnoElement — a Velxio board Web Component written from scratch.
  *
  * Contract it must satisfy (see frontend/src/simulation/boardPads.ts):
  *   - publish `pinInfo: ElementPin[]` on the DOM node — the canvas draws its
@@ -28,8 +28,8 @@ export interface ElementPin {
   >;
 }
 
-export const ACME_UNO_W = 270;
-export const ACME_UNO_H = 160;
+export const ZHANSHENKX_UNO_W = 270;
+export const ZHANSHENKX_UNO_H = 160;
 
 const GND = (): ElementPin['signals'][number] => ({ type: 'power', signal: 'GND' });
 const VCC = (v: number): ElementPin['signals'][number] => ({
@@ -86,12 +86,12 @@ function art(): string {
   const digitalPads = PIN_INFO.filter((p) => p.name.startsWith('D')).map((p) => pad(p.x, p.y));
   const lowerPads = PIN_INFO.filter((p) => !p.name.startsWith('D')).map((p) => pad(p.x, p.y));
   return `
-<svg xmlns="http://www.w3.org/2000/svg" width="${ACME_UNO_W}" height="${ACME_UNO_H}" viewBox="0 0 ${ACME_UNO_W} ${ACME_UNO_H}">
-  <rect x="0.5" y="0.5" width="${ACME_UNO_W - 1}" height="${ACME_UNO_H - 1}" rx="8"
+<svg xmlns="http://www.w3.org/2000/svg" width="${ZHANSHENKX_UNO_W}" height="${ZHANSHENKX_UNO_H}" viewBox="0 0 ${ZHANSHENKX_UNO_W} ${ZHANSHENKX_UNO_H}">
+  <rect x="0.5" y="0.5" width="${ZHANSHENKX_UNO_W - 1}" height="${ZHANSHENKX_UNO_H - 1}" rx="8"
         fill="#0f7a5a" stroke="#0a5c44" stroke-width="1"/>
   <!-- silkscreen -->
   <text x="135" y="40" text-anchor="middle" font-family="monospace" font-size="13"
-        fill="#d8f5ea" letter-spacing="3">ACME UNO R3</text>
+        fill="#d8f5ea" letter-spacing="3">ZHANSHENKX UNO R3</text>
   <text x="135" y="50" text-anchor="middle" font-family="monospace" font-size="7"
         fill="#9ed9c4" letter-spacing="1.5">ATmega328P · 16 MHz</text>
   <!-- mounting holes -->
@@ -126,7 +126,7 @@ function art(): string {
 
 const TEMPLATE = art();
 
-export class AcmeUnoElement extends HTMLElement {
+export class ZhanshenkxUnoElement extends HTMLElement {
   /** Same property name the Uno's wokwi element exposes, so any code that
    *  drives a board's "L" LED can drive this one too. */
   private _led13 = false;
@@ -144,9 +144,9 @@ export class AcmeUnoElement extends HTMLElement {
   static watchPin: ((pin: number, cb: (state: boolean) => void) => () => void) | null = null;
 
   connectedCallback(): void {
-    if (this._unwatch || !AcmeUnoElement.watchPin) return;
+    if (this._unwatch || !ZhanshenkxUnoElement.watchPin) return;
     try {
-      this._unwatch = AcmeUnoElement.watchPin(13, (state) => {
+      this._unwatch = ZhanshenkxUnoElement.watchPin(13, (state) => {
         this.led13 = state;
         if (state) this.pulseTx();
       });
@@ -171,7 +171,7 @@ export class AcmeUnoElement extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot!.innerHTML =
-      `<style>:host{display:block;width:${ACME_UNO_W}px;height:${ACME_UNO_H}px;}` +
+      `<style>:host{display:block;width:${ZHANSHENKX_UNO_W}px;height:${ZHANSHENKX_UNO_H}px;}` +
       `svg{display:block;user-select:none}</style>${TEMPLATE}`;
   }
 

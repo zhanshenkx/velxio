@@ -12,8 +12,8 @@ frontend/src/pro/
   index.ts                  mountPro()：注册板卡 + 挂 LED 订阅
   desktop_index.ts          Vite 会静态解析的这个分支，必须存在
   boards/
-    AcmeUnoElement.ts       板卡 Web Component：SVG 外观 + pinInfo
-    acmeUno.ts              板卡数据（ProBoardDef）：标签/FQBN/引脚表/种子代码
+    ZhanshenkxUnoElement.ts       板卡 Web Component：SVG 外观 + pinInfo
+    zhanshenkxUno.ts              板卡数据（ProBoardDef）：标签/FQBN/引脚表/种子代码
   data/proExamples.ts       空示例列表（OSS 必需）
   seoRoutes.ts              空 SEO 路由（OSS 必需）
   i18n/register.ts          空 i18n 注册（OSS 必需）
@@ -40,7 +40,7 @@ frontend/src/pro/
 
 - **板载 LED 没有官方通道**：画布把 `onboardLeds` 只传给它认识的板（Uno/Nano/Mega/ESP32），
   `ProBoardDef.render` 拿不到。我们用 `useSimulatorStore.getState().getBusBinding().pins.onPinChange`
-  自己订阅 D13 补上了（`AcmeUnoElement.watchPin`）。这是绕过，不是官方 API。
+  自己订阅 D13 补上了（`ZhanshenkxUnoElement.watchPin`）。这是绕过，不是官方 API。
 - **AGPLv3**：对外提供网络服务时，改过的源码要一起开源；不想开源就得买商业授权。
 - ESP32 / 树莓派需要后端 QEMU 与 ESP-IDF，本机没有 Docker，这条没通。
 

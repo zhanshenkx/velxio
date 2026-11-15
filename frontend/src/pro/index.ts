@@ -8,16 +8,20 @@
  * a fast-forward instead of a merge.
  */
 import { registerProBoards } from '@velxio/lib/proBoardRegistry';
-import { ACME_UNO_DEF, attachAcmeUnoPinWatch, defineAcmeUnoElement } from './boards/acmeUno';
+import {
+  ZHANSHENKX_UNO_DEF,
+  attachZhanshenkxUnoPinWatch,
+  defineZhanshenkxUnoElement,
+} from './boards/zhanshenkxUno';
 
 export function mountPro(): void {
   // 1. The custom element must exist before the picker draws a thumbnail.
-  defineAcmeUnoElement();
+  defineZhanshenkxUnoElement();
   // 2. Data registration: label, FQBN, pin map, seed sketch.
-  registerProBoards([ACME_UNO_DEF]);
+  registerProBoards([ZHANSHENKX_UNO_DEF]);
   // 3. Let the board's own LED follow the emulated pin.
-  attachAcmeUnoPinWatch();
+  attachZhanshenkxUnoPinWatch();
 
   // eslint-disable-next-line no-console
-  console.info('[overlay] registered board:', ACME_UNO_DEF.kind, '->', ACME_UNO_DEF.fqbn);
+  console.info('[overlay] registered board:', ZHANSHENKX_UNO_DEF.kind, '->', ZHANSHENKX_UNO_DEF.fqbn);
 }
