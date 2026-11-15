@@ -173,6 +173,14 @@ WORKDIR /app/frontend
 # building the tree from scratch ("Cannot read properties of null (reading
 # 'edgesOut')", a peer-set bug in arborist) since vitest 4.1.12 was published
 # on 2026-10-15. npm 11 resolves the same package.json.
+# This fork commits its overlay at frontend/src/pro (upstream gitignores that
+# path and mounts a private one). Bake it in: without these two vars the alias
+# falls back to src/__pro_stub__, and the image ships stock Velxio with no
+# Zhanshenkx Uno R3 board. PRO_OVERLAY_PATH must be absolute here because
+# vite.config.ts resolves it with path.resolve().
+ENV VITE_PRO_BUILD=true \
+    PRO_OVERLAY_PATH=/app/frontend/src/pro
+
 RUN npm install -g npm@11 --no-audit --no-fund \
  && rm -f package-lock.json \
  && npm install --include=optional \

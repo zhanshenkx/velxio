@@ -3,8 +3,9 @@
 这是 [davidmonterocrespo24/velxio](https://github.com/davidmonterocrespo24/velxio) 的
 **个人 fork**，在保留上游全部功能的前提下，加了一块自己画的板卡。
 
-- 上游源码 **零逻辑修改**（动过的既有文件只有两个：`README.md` 加了指向本文件的说明，
-  `.gitignore` 加了 2 行忽略 `tools/*.exe`）
+- 上游源码 **零逻辑修改**（动过的既有文件只有三个：`README.md` 加了指向本文件的说明，
+  `.gitignore` 加了 2 行忽略 `tools/*.exe`，`Dockerfile.standalone` 加了 2 个构建期 `ENV`
+  让镜像带 overlay——三处都不改任何运行逻辑）
 - 全部增量都是**新增文件**，集中在 `frontend/src/pro/`
 - 修改声明：**[MODIFICATIONS.md](MODIFICATIONS.md)**（AGPLv3 §5 要求）
 - 机制与扩板说明：**[docs/OVERLAY.md](docs/OVERLAY.md)**
@@ -87,10 +88,25 @@ start-lan.bat      :: 同上，但 dev server 监听局域网，手机/平板也
 docker compose up --build     :: 打开 http://localhost:3080
 ```
 
-注意：镜像里前端构建走 `npm run build:docker`（上游 OSS 入口），**不含本 fork 的
-`src/pro` overlay**。要部署带 Zhanshenkx Uno R3 的公网版，需在 `Dockerfile.standalone`
-的 frontend-builder 阶段注入 `VITE_PRO_BUILD` 与 `PRO_OVERLAY_PATH`（容器内路径），
-否则部署上去只是原版 Velxio。另外 AGPLv3 要求：对外提供网络服务时须提供对应源码。
+本 fork 已在 `Dockerfile.standalone` 的 frontend-builder 阶段注入
+`VITE_PRO_BUILD=true` / `PRO_OVERLAY_PATH=/app/frontend/src/pro`，否则镜像里前端走的是
+`src/__pro_stub__`，部署上去只是原版 Velxio、没有这块板。
+
+**不要用 `npm run build` 打带 overlay 的包**：它先跑 `tsc -b`，而上游自身就有 363 个类型错误
+（`src/__tests__/**`、`src/utils/firmwareLoader.ts`、`vite.config.ts` 等），
+`tsconfig` 也没给 `@velxio/*` 配 `paths`（本 fork overlay 因此额外贡献 3 个 `TS2307`）。
+生产路径一律是 `build:docker`，它跳过 tsc：
+
+```bash
+cd frontend
+VITE_PRO_BUILD=true PRO_OVERLAY_PATH=$PWD/src/pro npm run build:docker
+```
+
+本机实测这条命令 41 秒出包（332 个预渲染页），`dist/assets/pro-*.js` 里带 `ZHANSHENKX` 与
+`zhanshenkx-uno`；把 `dist` 交给后端同源托管后，浏览器里 选择器 → 放板 → Run 仍然编译成功、
+串口正常。**镜像本身未在本机验证**——这台机器没有 Docker，上表结论来自同一条构建命令 + 同源托管。
+
+AGPLv3 要求：把它作为网络服务对外提供时，须一并提供对应源码（本仓库已公开，满足）。
 
 前置：Node 18+、Python 3.10+、`arduino-cli`（放 `tools\arduino-cli.exe` 或加进 `PATH`）。
 

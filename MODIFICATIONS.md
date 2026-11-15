@@ -13,12 +13,13 @@
 
 上游源码**零逻辑修改**。改动分两类：
 
-### 1. 修改的既有文件（仅 2 个）
+### 1. 修改的既有文件（仅 3 个）
 
 | 文件 | 改动 |
 |---|---|
 | `README.md` | 顶部新增一段说明，指向 `CUSTOM.md`；其余内容保持上游原样 |
 | `.gitignore` | 追加 2 行，忽略 `tools/*.exe`（本机 arduino-cli 二进制） |
+| `Dockerfile.standalone` | frontend-builder 阶段加 2 个 `ENV`（`VITE_PRO_BUILD`、`PRO_OVERLAY_PATH`），让镜像烘进本 fork 的 overlay |
 
 ### 2. 新增文件
 
