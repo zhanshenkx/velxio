@@ -49,17 +49,18 @@ echo Starting frontend on localhost:5173 ...
 start "velxio frontend" /d "%ROOT%frontend" cmd /c "npx vite --port 5173 --strictPort"
 
 echo Waiting for the dev server...
-set "HASCURL="
-where curl >nul 2>nul && set "HASCURL=1"
-if not defined HASCURL (
-  timeout /t 10 /nobreak >nul
+REM Ping, not `timeout /t`: any shell that puts coreutils on PATH shadows
+REM timeout.exe and `timeout /t 2` dies with "invalid time interval".
+set "CURL=%SystemRoot%\System32\curl.exe"
+set /a TRIES=0
+if not exist "%CURL%" (
+  ping -n 6 127.0.0.1 >nul
   goto :ready
 )
-set /a TRIES=0
 :wait
 set /a TRIES+=1
-timeout /t 2 /nobreak >nul
-curl -s -o nul http://localhost:5173/ && goto :ready
+ping -n 3 127.0.0.1 >nul
+"%CURL%" -s -o nul http://localhost:5173/ && goto :ready
 if %TRIES% lss 30 goto :wait
 echo [!] dev server did not answer within 60s - check the "velxio frontend" window.
 goto :done

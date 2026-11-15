@@ -20,14 +20,12 @@ REM ---------- frontend deps ----------
 echo.
 echo [1/4] Installing frontend dependencies (a few minutes)...
 pushd frontend
-REM --legacy-peer-deps first: `npm install` on this lockfile dies with
-REM "Cannot read properties of null (reading 'edgesOut')" on npm 10/11, and the
-REM plain retry would just burn another minute.
-if exist package-lock.json (
-  call npm install --no-audit --no-fund --legacy-peer-deps
-) else (
-  call npm install --no-audit --no-fund
-)
+REM --legacy-peer-deps, unconditionally. Upstream gitignores package-lock.json
+REM (see .gitignore), so every clone resolves the tree from scratch and npm
+REM 10/11 dies with "Cannot read properties of null (reading 'edgesOut')" on the
+REM peer graph. Ignoring peers sidesteps that path and installs cleanly
+REM (measured: 551 packages in ~2 min).
+call npm install --no-audit --no-fund --legacy-peer-deps
 if errorlevel 1 (
   echo     retry without --legacy-peer-deps
   call npm install --no-audit --no-fund
