@@ -1,5 +1,12 @@
 # Velxio: Arduino & Embedded Board Emulator
 
+> **This is a personal fork with a custom board overlay.**
+> Added: a hand-drawn `Acme Uno R3` board (SVG + pin table) under
+> `frontend/src/pro/`, plus `setup.bat` / `start-custom.bat` for one-click local
+> launch. Upstream source is otherwise unmodified.
+> See **[CUSTOM.md](CUSTOM.md)** for what changed and how to run,
+> and **[MODIFICATIONS.md](MODIFICATIONS.md)** for the AGPLv3 §5 notice.
+
 **Live at [velxio.dev](https://velxio.dev)**
 
 An open-source multi-board emulator and circuit simulator. Write Arduino C++, MicroPython, ESP-IDF or Python, compile it, and run it against real CPU emulation with 150+ interactive electronic components — all in your browser.
