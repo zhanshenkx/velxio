@@ -43,5 +43,5 @@ start "" http://localhost:5173/editor
 echo.
 echo   App:      http://localhost:5173/editor      (use "localhost", not 127.0.0.1)
 echo   Backend:  http://127.0.0.1:8001/docs
-echo   Board:    search "acme" in the component picker
+echo   Board:    search "zhanshenkx" in the component picker
 endlocal
