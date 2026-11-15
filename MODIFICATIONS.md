@@ -34,6 +34,7 @@
 | `frontend/src/pro/pages/marketing.ts` | 营销页的空实现 |
 | `setup.bat` | 一键还原依赖、Monaco 静态资源、Python venv |
 | `start-custom.bat` | 一键启动后端 + 前端（带 overlay 环境变量） |
+| `start-lan.bat` | 同上，但前端绑 `0.0.0.0`，供同局域网设备访问 |
 | `docs/OVERLAY.md` | overlay 机制与扩板说明 |
 | `tools/README.md` | 占位说明：`arduino-cli.exe` 放这里（目录本身需提交才能存在） |
 | `.gitattributes` | 强制 `*.bat` 以 CRLF 检出（`goto` 标签在纯 LF 下不稳） |

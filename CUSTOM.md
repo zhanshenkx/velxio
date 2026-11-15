@@ -23,7 +23,8 @@ frontend/src/pro/
   i18n/register.ts         空 i18n 注册
   pages/marketing.ts       空营销页
 setup.bat                  一键还原依赖 / Monaco / Python venv
-start-custom.bat           一键启动后端 8001 + 前端 5173
+start-custom.bat           一键启动后端 8001 + 前端 5173（仅本机）
+start-lan.bat              同上，前端监听 0.0.0.0:5173 供局域网访问
 tools/README.md            arduino-cli.exe 的放置说明（占位，让目录能进仓库）
 docs/OVERLAY.md            机制说明
 MODIFICATIONS.md           AGPLv3 修改声明
@@ -59,12 +60,37 @@ Run），结果一致：板卡 `kind` 为 `zhanshenkx-uno`，串口输出同上�
 git clone https://github.com/zhanshenkx/velxio.git
 cd velxio
 setup.bat          :: 首次：装依赖 + 补 Monaco + 建 venv + 检查 arduino-cli
-start-custom.bat   :: 启动，自动开浏览器
+start-custom.bat   :: 启动，只监听本机，自动开浏览器
+start-lan.bat      :: 同上，但 dev server 监听局域网，手机/平板也能开
 ```
 
 打开 <http://localhost:5173/editor>，选择器里搜 `zhanshenkx`。
 
 > Vite 7 在部分 Windows 环境只绑 `::1`，**必须用 `localhost`，不能用 `127.0.0.1`**。
+
+### 局域网给别的设备用
+
+`start-lan.bat` 会把 Vite 绑到 `0.0.0.0:5173` 并打印本机 IPv4，手机同 WiFi 打开
+`http://<本机IPv4>:5173/editor` 即可。后端**仍只监听 `127.0.0.1:8001`**——浏览器请求
+`/api/*` 由 Vite 在服务端反代过去，所以局域网只暴露 5173 一个口，接口不会被外人直连。
+
+实测：从 `http://192.168.10.115:5173/editor` 走完 选择器 → 放板 → Run，编译与串口输出正常，
+与 localhost 行为一致。手机打不开先看 Windows 防火墙有没有放行 Node.js（专用网络）。
+
+### 能不能放公网
+
+能，但**不能只丢静态文件**：AVR 仿真（avr8js）在浏览器里跑，编译却依赖后端
+`arduino-cli` + ~400MB 的 `arduino:avr` 内核，纯静态托管（Pages / Vercel）会在编译那一步 404。
+上游的做法是一个容器同时 serve 前端 `dist` 和 API：
+
+```bat
+docker compose up --build     :: 打开 http://localhost:3080
+```
+
+注意：镜像里前端构建走 `npm run build:docker`（上游 OSS 入口），**不含本 fork 的
+`src/pro` overlay**。要部署带 Zhanshenkx Uno R3 的公网版，需在 `Dockerfile.standalone`
+的 frontend-builder 阶段注入 `VITE_PRO_BUILD` 与 `PRO_OVERLAY_PATH`（容器内路径），
+否则部署上去只是原版 Velxio。另外 AGPLv3 要求：对外提供网络服务时须提供对应源码。
 
 前置：Node 18+、Python 3.10+、`arduino-cli`（放 `tools\arduino-cli.exe` 或加进 `PATH`）。
 
